@@ -4,7 +4,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		// big --> 1200
-//		execute(System.nanoTime(), new WordSearchArray());
+		execute(System.nanoTime(), new WordSearchArray());
 		
 		// big --> 1500
 //		execute(System.nanoTime(), new WordSearch2dArray());
@@ -13,7 +13,7 @@ public class Main {
 //		execute(System.nanoTime(), new WordSearchObject());
 		
 		// big --> 400
-		execute(System.nanoTime(), new WordSearchLetterMap());
+//		execute(System.nanoTime(), new WordSearchLetterMap());
 	}
 	
 	public static void all() {

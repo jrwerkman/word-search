@@ -10,7 +10,7 @@ public enum Direction {
 	RIGHT_TOP(1, -1),
 	RIGHT_BOTTOM(1, 1);
 	
-	final int hor, ver;
+	public final int hor, ver;
 	
 	private Direction(int hor, int ver) {
 		this.hor = hor;
