@@ -21,6 +21,8 @@ public class WordSearchArray extends WordSearchBase {
 		for(String word : words)
 			findWord(word.toCharArray());
 		
+		System.out.println(wordsFound);
+		
 		return unusedChars();
 	}
 	

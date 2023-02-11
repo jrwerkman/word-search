@@ -1,11 +1,16 @@
 package nl.jrwer.challenges.wordsearch.creater;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -18,17 +23,37 @@ public class Puzzle {
 	private final int width;
 	private final int height;
 	private final int amountLetters;
+	
+	private final Map<Character, List<Coord>> letterCoords = new HashMap<>();
+//	private final Map<Coord, String> usedWords = new HashMap<>(); 
+	
 	private final Set<String> usedWords = new HashSet<>();
+	private final Set<Coord> unused = new HashSet<>();
 	private final Set<Coord> used = new HashSet<>();
 	private final Set<Coord> dontUse = new HashSet<>();
-	private final WordList words = new WordList();
+	private final WordList words;
+	
+	public Puzzle(int width, int height, List<String> words) {
+		this(width, height, "");
+		
+		
+	}
+	
+	public Puzzle(int width, int height, int emptySpots) {
+		this(width, height, "");
+		// TODO create sentence and call other constuctor
+	}
 	
 	public Puzzle(int width, int height, String sentence) {
+		this.words = new WordList(); 
 		this.grid = new char[width][height];
 		
-		// TODO temp
 		for(int x=0; x<width; x++)
 			Arrays.fill(grid[x], '#');
+		
+		for(int x=0; x<width; x++)
+			for(int y=0; y<height; y++)
+				unused.add(new Coord(x, y));
 		
 		this.sentence = sentence.toUpperCase().toCharArray();
 		
@@ -38,11 +63,47 @@ public class Puzzle {
 	}
 	
 	public void create() {
-		placeSentence();
+		placeSentenceRandom();
 		placeWords();
+		
+//		placeSentence();
 	}
 	
+	public void create(String gridOutput, String wordsOutput) throws IOException {
+		create();
+		
+		gridToFile(gridOutput);
+		wordsToFile(wordsOutput);
+		
+	}
+	
+	private void gridToFile(String filename) throws IOException {
+		try(BufferedWriter writer = new BufferedWriter(new FileWriter(filename, false))) {
+			writer.write(this.toString());
+		}
+	}
+	
+	private void wordsToFile(String filename) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		
+		for(String word : usedWords)
+			sb.append(word).append('\n');
+		
+		try(BufferedWriter writer = new BufferedWriter(new FileWriter(filename, false))) {
+			writer.write(sb.toString());
+		}
+		
+	}
+
 	private void placeSentence() {
+		List<Coord> sentenceCoords = new ArrayList<>();
+		sentenceCoords.addAll(unused);
+		
+		sortCoordsList(sentenceCoords);
+		placeSentence(sentenceCoords);
+	}
+	
+	private void placeSentenceRandom() {
 		List<Coord> randomCoords = new ArrayList<>();
 		
 		while(randomCoords.size() < sentence.length) {
@@ -52,7 +113,12 @@ public class Puzzle {
 				randomCoords.add(c);
 		}
 
-		Collections.sort(randomCoords, new Comparator<Coord>() {
+		sortCoordsList(randomCoords);
+		placeSentence(randomCoords);
+	}
+	
+	private void sortCoordsList(List<Coord> l) {
+		Collections.sort(l, new Comparator<Coord>() {
 			public int compare(Coord c1, Coord c2) {
 				int result = Integer.compare(c1.y, c2.y);
 				
@@ -62,61 +128,148 @@ public class Puzzle {
 				return result;
 			}
 		});
-		
+	}
+	
+	private void placeSentence(List<Coord> coords) {
 		int i=0;
-		for(Coord c : randomCoords) {
+		for(Coord c : coords) {
 			grid[c.x][c.y] = sentence[i];
 
 			used.add(c);
 			dontUse.add(c);
+			unused.remove(c);
 
 			i++;
 		}
 	}
-	
-	// TODO if word contains part of another word
+
+	/**
+	 * TODO keep list of coords of letter, for first letter of word.
+	 * TODO if not placable, try for every unused letter, or every first letter
+	 */
 	private void placeWords() {
 		words.randomize();
 		
 		while(words.hasNext()) {
-//			String word = words.getRandomWord();
-			String word = words.next();
+			String wordString = words.next();
 			
-			if(usedWords.contains(word))
+			if(usedWords.contains(wordString) || isSubWord(wordString))
 				continue;
 			
-			char[] wordChars = word.toCharArray();
+			char[] word = wordString.toCharArray();
+			
+			if(isWordInGrid(word))
+				continue;
+			
 			Direction direction = getRandomDirection();
 			
 			Coord c = getRandomCoord();
 			
-			if(!dontUse.contains(c) && canPlace(word, wordChars, direction, c)) {
-				System.out.println(word);
-				placeWord(wordChars, direction, c);
-				usedWords.add(word);
+			if(canPlace(word, direction, c)) {
+				System.out.println(wordString);
+				placeWord(wordString, word, direction, c);
+			} else {
+				// TODO if not enough try other directions
+				c = placeAtKnownLocation(word, direction);
+				
+				if(c != null) {
+					System.out.println(wordString);
+					placeWord(wordString, word, direction, c);
+				}
 			}
 			
-			if(used.size() < amountLetters) {
-				// READY
+			if(used.size() == amountLetters) {
+				System.out.println("ready");
 				break;
 			}
 		}
 	}
 	
-	private void placeWord(char[] word, Direction direction, Coord coord) {
-		Coord c = coord;
+	private boolean isWordInGrid(char[] word) {
+		// TODO check for double words
+
+		List<Coord> coords = letterCoords.get(word[0]);
 		
+		if(coords != null)
+			for(Coord c : coords)
+				if(isWordInGrid(word, c))
+					return true;
+		
+		return false;
+	}
+	
+	private boolean isWordInGrid(char[] word, Coord c) {
+		for(Direction direction : Direction.values())
+			if(isWordInGrid(word, c, direction))
+				return true;
+		
+		return false;
+	}
+
+	private boolean isWordInGrid(char[] word, Coord c, Direction direction) {
 		for(char letter : word) {
-			if(grid[c.x][c.y] == '#')
-				grid[c.x][c.y] = letter;
-			else if(grid[c.x][c.y] != letter)
-				throw new RuntimeException();
+			if(!inBounds(c))
+				return false;
 			
-			used.add(c);
+			if(grid[c.x][c.y] != letter)
+				return false;
 			
 			c = new Coord(c, direction);
 		}
+		
+		return true;
 	}
+
+	private Coord placeAtKnownLocation(char[] word, Direction direction) {
+		List<Coord> charCoords = letterCoords.get(word[0]);
+		
+		if(charCoords != null)
+			for(Coord c : charCoords)
+				if(canPlace(word, direction, c))
+					return c;
+		
+		for(Coord c: unused) 
+			if(canPlace(word, direction, c))
+				return c;
+		
+		return null;
+	}
+	
+	private void placeWord(String wordString, char[] word, Direction direction, Coord coord) {
+		Coord c = coord;
+		
+		for(char letter : word) {
+			if(grid[c.x][c.y] == '#') {
+				grid[c.x][c.y] = letter;
+				
+				if(letterCoords.containsKey(letter)) {
+					letterCoords.get(letter).add(c);
+				} else {
+					List<Coord> coords = new ArrayList<>();
+					coords.add(c);
+					
+					letterCoords.put(letter, coords);
+				}
+			} else if(grid[c.x][c.y] != letter) {
+				throw new RuntimeException();
+			}
+			
+			used.add(c);
+			unused.remove(c);
+			
+			c = new Coord(c, direction);
+		}
+		
+		usedWords.add(wordString);
+	}
+	
+//	private boolean canPlace(char[] word, Coord coord) {
+//		for(Direction direction : Direction.values())
+//			if(!canPlace(word, direction, coord))
+//				return false;
+//		
+//		return true;
+//	}
 	
 	/**
 	 * Checks:
@@ -130,15 +283,14 @@ public class Puzzle {
 	 * @param coord
 	 * @return
 	 */
-	private boolean canPlace(String wordString, char[] word, Direction direction, Coord coord) {
+	private boolean canPlace(char[] word, Direction direction, Coord coord) {
 		boolean unusedLetter = false;
 		Coord currentCoords = coord;
 		
 		for(char letter : word) {
 			if(dontUse.contains(currentCoords) 
 					|| !inBounds(currentCoords) 
-					|| !isCoordFree(currentCoords, letter)
-					|| isSubWord(wordString))
+					|| !isCoordFree(currentCoords, letter))
 				return false;
 			
 			

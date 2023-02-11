@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 public class WordList {
-	private static final String WORD_LIST = "words_alpha.txt";
+//	private static final String WORD_LIST = "words_alpha.txt";
+	private static final String WORD_LIST = "words_nl.txt";
 	private final List<String> words = new ArrayList<>();
 	private final int wordCount;
 	private final Random random = new Random();
@@ -32,8 +34,8 @@ public class WordList {
             		continue;
             	
             	// skip 1 letter words
-            	if(line.length() > 2)
-            		words.add(line);
+            	if(line.length() > 2 && Pattern.matches("[\\dA-Za-z]+", line))
+            		words.add(line.toUpperCase());
             }
         } catch (IOException e) {
 			e.printStackTrace();
@@ -41,6 +43,7 @@ public class WordList {
 	}
 	
 	public void randomize() {
+		count = 0;
 		Collections.shuffle(words, random);
 	}
 	
@@ -55,8 +58,6 @@ public class WordList {
 			count++;
 		}
 	}
-	
-	
 	
 	public String getRandomWord() {
 		return words.get(random.nextInt(wordCount)).toUpperCase();

@@ -4,7 +4,7 @@ public class WordSearchSolver {
 
 	public static void main(String[] args) {
 		// big --> 1200
-		execute(System.nanoTime(), new WordSearchArray());
+//		execute(System.nanoTime(), new WordSearchArray());
 		
 		// big --> 1500
 //		execute(System.nanoTime(), new WordSearch2dArray());
@@ -13,7 +13,7 @@ public class WordSearchSolver {
 //		execute(System.nanoTime(), new WordSearchObject());
 		
 		// big --> 400
-//		execute(System.nanoTime(), new WordSearchLetterMap());
+		execute(System.nanoTime(), new WordSearchLetterMap());
 	}
 	
 	public static void all() {
@@ -27,6 +27,7 @@ public class WordSearchSolver {
 		
 		for(WordSearchBase s : searchers)
 			execute(System.nanoTime(), s);
+		
 	}
 	
 	public static void execute(long start, WordSearchBase w) {
@@ -45,7 +46,7 @@ public class WordSearchSolver {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append(w.getClass().getSimpleName()).append('\n');
-		sb.append("Unused letters: ").append(unused.length() > 50 ? unused.length() : unused.toString()).append('\n');
+		sb.append("Unused letters: ").append(unused.length() > 100 ? unused.length() : unused.toString()).append('\n');
 		sb.append("Time loading data: ").append(afterLoading - start).append(" nanoseconds").append('\n');
 		sb.append("Time processing data: ").append(end - afterLoading).append(" nanoseconds").append('\n');
 		sb.append("Time processing data: ").append((end - afterLoading) / 1000000).append(" milisecond").append('\n');
