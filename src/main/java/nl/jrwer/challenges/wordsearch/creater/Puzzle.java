@@ -76,8 +76,11 @@ public class Puzzle {
 	
 	// TODO if word contains part of another word
 	private void placeWords() {
-		while(used.size() < amountLetters) {
-			String word = words.getRandomWord();
+		words.randomize();
+		
+		while(words.hasNext()) {
+//			String word = words.getRandomWord();
+			String word = words.next();
 			
 			if(usedWords.contains(word))
 				continue;
@@ -91,6 +94,11 @@ public class Puzzle {
 				System.out.println(word);
 				placeWord(wordChars, direction, c);
 				usedWords.add(word);
+			}
+			
+			if(used.size() < amountLetters) {
+				// READY
+				break;
 			}
 		}
 	}

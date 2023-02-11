@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +14,8 @@ public class WordList {
 	private final List<String> words = new ArrayList<>();
 	private final int wordCount;
 	private final Random random = new Random();
+	
+	public int count = 0;
 	
 	public WordList() {
 		loadWords();
@@ -36,6 +39,24 @@ public class WordList {
 			e.printStackTrace();
 		}
 	}
+	
+	public void randomize() {
+		Collections.shuffle(words, random);
+	}
+	
+	public boolean hasNext() {
+		return count < words.size();
+	}
+	
+	public String next() {
+		try {
+			return words.get(count);
+		} finally {
+			count++;
+		}
+	}
+	
+	
 	
 	public String getRandomWord() {
 		return words.get(random.nextInt(wordCount)).toUpperCase();
