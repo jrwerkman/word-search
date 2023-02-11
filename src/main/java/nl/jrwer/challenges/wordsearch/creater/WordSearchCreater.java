@@ -1,6 +1,6 @@
-package nl.jrwer.challenges.wordsearch.creator;
+package nl.jrwer.challenges.wordsearch.creater;
 
-public class Main {
+public class WordSearchCreater {
 	public static void main(String[] args) {
 		try {
 			Puzzle puzzle = new Puzzle(10, 10, "Novadoc");

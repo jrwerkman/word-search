@@ -1,6 +1,6 @@
 package nl.jrwer.challenges.wordsearch.solver;
 
-public class Main {
+public class WordSearchSolver {
 
 	public static void main(String[] args) {
 		// big --> 1200

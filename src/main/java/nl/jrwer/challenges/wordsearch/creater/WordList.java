@@ -1,4 +1,4 @@
-package nl.jrwer.challenges.wordsearch.creator;
+package nl.jrwer.challenges.wordsearch.creater;
 
 import java.io.BufferedReader;
 import java.io.IOException;

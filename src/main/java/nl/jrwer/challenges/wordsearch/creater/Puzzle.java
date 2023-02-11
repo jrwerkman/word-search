@@ -1,4 +1,4 @@
-package nl.jrwer.challenges.wordsearch.creator;
+package nl.jrwer.challenges.wordsearch.creater;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,7 +87,7 @@ public class Puzzle {
 			
 			Coord c = getRandomCoord();
 			
-			if(!dontUse.contains(c) && canPlace(wordChars, direction, c)) {
+			if(!dontUse.contains(c) && canPlace(word, wordChars, direction, c)) {
 				System.out.println(word);
 				placeWord(wordChars, direction, c);
 				usedWords.add(word);
@@ -110,20 +110,29 @@ public class Puzzle {
 		}
 	}
 	
-	private boolean canPlace(char[] word, Direction direction, Coord coord) {
+	/**
+	 * Checks:
+	 * - if words is in grid
+	 * - if sentence letters are not used
+	 * - if coord contains a letter it is the same as the new word
+	 * - if all letters are used, dont add the word
+	 * - if word is a sub word of a used word and vice versa
+	 * @param word
+	 * @param direction
+	 * @param coord
+	 * @return
+	 */
+	private boolean canPlace(String wordString, char[] word, Direction direction, Coord coord) {
 		boolean unusedLetter = false;
 		Coord currentCoords = coord;
 		
 		for(char letter : word) {
-			if(!inBounds(currentCoords) || dontUse.contains(currentCoords))
+			if(dontUse.contains(currentCoords) 
+					|| !inBounds(currentCoords) 
+					|| !isCoordFree(currentCoords, letter)
+					|| isSubWord(wordString))
 				return false;
 			
-			char currentChar = grid[currentCoords.x][currentCoords.y];
-			
-			if(currentChar == '#') {
-				
-			} else if(currentChar != letter)
-				return false;
 			
 			if(!used.contains(currentCoords))
 			 	unusedLetter = true;
@@ -136,6 +145,20 @@ public class Puzzle {
 	
 	private boolean inBounds(Coord c) {
 		return c.x >= 0 && c.x < width && c.y >= 0 && c.y < height;
+	}
+	
+	private boolean isCoordFree(Coord c, char letter) {
+		char currentChar = grid[c.x][c.y];
+		
+		return currentChar == '#' || currentChar == letter;
+	}
+	
+	private boolean isSubWord(String word) {
+		for(String used : usedWords)
+			if(word.contains(used) || used.contains(word))
+				return true;
+		
+		return false;
 	}
 	
 	private Coord getRandomCoord() {
