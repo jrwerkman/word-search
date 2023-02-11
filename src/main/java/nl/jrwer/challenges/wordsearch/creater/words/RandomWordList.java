@@ -1,4 +1,4 @@
-package nl.jrwer.challenges.wordsearch.creater;
+package nl.jrwer.challenges.wordsearch.creater.words;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,25 +7,23 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.regex.Pattern;
 
-public class WordList {
+public class RandomWordList implements IWordList {
 //	private static final String WORD_LIST = "words_alpha.txt";
 	private static final String WORD_LIST = "words_nl.txt";
 	private final List<String> words = new ArrayList<>();
 	private final int wordCount;
-	private final Random random = new Random();
 	
-	public int count = 0;
+	private int count = 0;
 	
-	public WordList() {
+	public RandomWordList() {
 		loadWords();
 		this.wordCount = words.size();
 	}
 	
 	private void loadWords() {
-        try (InputStream inputStream = WordList.class.getClassLoader().getResourceAsStream(WORD_LIST);
+        try (InputStream inputStream = RandomWordList.class.getClassLoader().getResourceAsStream(WORD_LIST);
         		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
         	String line;
         	
@@ -42,15 +40,18 @@ public class WordList {
 		}
 	}
 	
+	@Override
 	public void randomize() {
 		count = 0;
-		Collections.shuffle(words, random);
+		Collections.shuffle(words, RANDOM);
 	}
 	
+	@Override
 	public boolean hasNext() {
 		return count < words.size();
 	}
 	
+	@Override
 	public String next() {
 		try {
 			return words.get(count);
@@ -59,7 +60,8 @@ public class WordList {
 		}
 	}
 	
+	@Override
 	public String getRandomWord() {
-		return words.get(random.nextInt(wordCount)).toUpperCase();
+		return words.get(RANDOM.nextInt(wordCount)).toUpperCase();
 	}
 }

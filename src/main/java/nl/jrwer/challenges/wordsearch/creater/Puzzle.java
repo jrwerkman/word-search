@@ -14,10 +14,13 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import nl.jrwer.challenges.wordsearch.creater.words.IWordList;
+import nl.jrwer.challenges.wordsearch.creater.words.RandomWordList;
+import nl.jrwer.challenges.wordsearch.creater.words.WordList;
 import nl.jrwer.challenges.wordsearch.solver.Direction;
 
 public class Puzzle {
-	private final Random random = new Random();
+	private static final Random RANDOM = new Random();
 	private final char[][] grid;
 	private final char[] sentence;
 	private final int width;
@@ -31,21 +34,23 @@ public class Puzzle {
 	private final Set<Coord> unused = new HashSet<>();
 	private final Set<Coord> used = new HashSet<>();
 	private final Set<Coord> dontUse = new HashSet<>();
-	private final WordList words;
+	private final IWordList words;
 	
 	public Puzzle(int width, int height, List<String> words) {
-		this(width, height, "");
-		
-		
+		this(width, height, "", new WordList(words));
 	}
 	
 	public Puzzle(int width, int height, int emptySpots) {
-		this(width, height, "");
-		// TODO create sentence and call other constuctor
+		this(width, height, getRandomSentence(emptySpots));
 	}
 	
+	
 	public Puzzle(int width, int height, String sentence) {
-		this.words = new WordList(); 
+		this(width, height, sentence, new RandomWordList());
+	}
+	
+	private Puzzle(int width, int height, String sentence, IWordList words) {
+		this.words = words; 
 		this.grid = new char[width][height];
 		
 		for(int x=0; x<width; x++)
@@ -66,7 +71,8 @@ public class Puzzle {
 		placeSentenceRandom();
 		placeWords();
 		
-//		placeSentence();
+		for(Coord c : unused)
+			grid[c.x][c.y] = getRandomChar();
 	}
 	
 	public void create(String gridOutput, String wordsOutput) throws IOException {
@@ -74,7 +80,6 @@ public class Puzzle {
 		
 		gridToFile(gridOutput);
 		wordsToFile(wordsOutput);
-		
 	}
 	
 	private void gridToFile(String filename) throws IOException {
@@ -95,13 +100,13 @@ public class Puzzle {
 		
 	}
 
-	private void placeSentence() {
-		List<Coord> sentenceCoords = new ArrayList<>();
-		sentenceCoords.addAll(unused);
-		
-		sortCoordsList(sentenceCoords);
-		placeSentence(sentenceCoords);
-	}
+//	private void placeSentence() {
+//		List<Coord> sentenceCoords = new ArrayList<>();
+//		sentenceCoords.addAll(unused);
+//		
+//		sortCoordsList(sentenceCoords);
+//		placeSentence(sentenceCoords);
+//	}
 	
 	private void placeSentenceRandom() {
 		List<Coord> randomCoords = new ArrayList<>();
@@ -322,8 +327,8 @@ public class Puzzle {
 	}
 	
 	private Coord getRandomCoord() {
-		int x = random.nextInt(width);
-		int y = random.nextInt(height);
+		int x = RANDOM.nextInt(width);
+		int y = RANDOM.nextInt(height);
 		
 		return new Coord(x, y);
 	}
@@ -331,7 +336,20 @@ public class Puzzle {
 	private Direction getRandomDirection() {
 		Direction[] dirs = Direction.values();
 		
-		return dirs[random.nextInt(dirs.length)];
+		return dirs[RANDOM.nextInt(dirs.length)];
+	}
+	
+	private static String getRandomSentence(int length) {
+		StringBuilder sb = new StringBuilder();
+		
+		for(int i=0; i<length; i++)
+			sb.append(getRandomChar());
+		
+		return sb.toString();
+	}
+	
+	public static char getRandomChar() {
+		return (char) (RANDOM.nextInt(26) + 65);
 	}
 	
 	@Override
