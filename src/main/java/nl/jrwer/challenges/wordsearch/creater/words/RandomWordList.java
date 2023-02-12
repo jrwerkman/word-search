@@ -9,9 +9,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+// TODO load words from big to small
 public class RandomWordList implements IWordList {
-//	private static final String WORD_LIST = "words_alpha.txt";
-	private static final String WORD_LIST = "words_nl.txt";
+	/**
+	 * https://github.com/dwyl/english-words
+	 */
+	private static final String WORD_LIST_EN = "words_alpha.txt";
+	
+	/**
+	 * https://github.com/OpenTaal/opentaal-wordlist 
+	 */
+	private static final String WORD_LIST_NL = "words_nl.txt";
+	
 	private final List<String> words = new ArrayList<>();
 	private final int wordCount;
 	
@@ -23,7 +32,7 @@ public class RandomWordList implements IWordList {
 	}
 	
 	private void loadWords() {
-        try (InputStream inputStream = RandomWordList.class.getClassLoader().getResourceAsStream(WORD_LIST);
+        try (InputStream inputStream = RandomWordList.class.getClassLoader().getResourceAsStream(WORD_LIST_NL);
         		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
         	String line;
         	
