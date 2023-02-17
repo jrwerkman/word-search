@@ -31,7 +31,7 @@ public class WordSearchCreater {
 		try {
 			long start = System.currentTimeMillis();
 			
-			puzzle("grid.txt", "words.txt", 50, 50, "Novadoc", new BigToSmallWordList());
+			puzzle("grid.txt", "words.txt", 1000, 1000, "Novadoc", new BigToSmallWordList());
 //			puzzle("grid.txt", "words.txt", 20, 20, 10);
 //			puzzle("grid.txt", "words.txt", 20, 20, words);
 			
