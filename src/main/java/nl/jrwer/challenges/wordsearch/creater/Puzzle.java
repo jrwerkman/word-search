@@ -15,8 +15,6 @@ import java.util.Random;
 import java.util.Set;
 
 import nl.jrwer.challenges.wordsearch.creater.words.IWordList;
-import nl.jrwer.challenges.wordsearch.creater.words.RandomWordList;
-import nl.jrwer.challenges.wordsearch.creater.words.WordList;
 import nl.jrwer.challenges.wordsearch.solver.Direction;
 
 public class Puzzle {
@@ -36,20 +34,15 @@ public class Puzzle {
 	private final Set<Coord> dontUse = new HashSet<>();
 	private final IWordList words;
 	
-	public Puzzle(int width, int height, List<String> words) {
-		this(width, height, "", new WordList(words));
+	public Puzzle(int width, int height, IWordList words) {
+		this(width, height, "", words);
 	}
 	
-	public Puzzle(int width, int height, int emptySpots) {
-		this(width, height, getRandomSentence(emptySpots));
+	public Puzzle(int width, int height, int emptySpots, IWordList words) {
+		this(width, height, getRandomSentence(emptySpots), words);
 	}
 	
-	
-	public Puzzle(int width, int height, String sentence) {
-		this(width, height, sentence, new RandomWordList());
-	}
-	
-	private Puzzle(int width, int height, String sentence, IWordList words) {
+	public Puzzle(int width, int height, String sentence, IWordList words) {
 		this.words = words; 
 		this.grid = new char[width][height];
 		

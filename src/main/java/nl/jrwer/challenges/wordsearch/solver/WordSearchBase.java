@@ -17,6 +17,8 @@ import java.util.List;
 public abstract class WordSearchBase {
 	public static final String FILE_GRID = "grid.txt";
 	public static final String FILE_WORDS = "words.txt";
+	
+	public int wordsFound = 0;
 //	public static final String FILE_GRID = "grid2.txt";
 //	public static final String FILE_WORDS = "words2.txt";
 //	public static final String FILE_GRID = "grid_big.txt";

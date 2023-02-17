@@ -8,7 +8,6 @@ public class WordSearch2dArray extends WordSearchBase {
 	public boolean [][] used;
 	public int height, width;
 	public List<String> words;
-	public int wordsFound = 0;
 	
 	@Override
 	public void prepare() throws Exception {

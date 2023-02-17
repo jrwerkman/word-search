@@ -7,7 +7,6 @@ public class WordSearchObject extends WordSearchBase {
 	public Elem[][] grid;
 	public int height, width;
 	public List<String> words;
-	public int wordsFound = 0;
 	
 	@Override
 	public void prepare() throws Exception {

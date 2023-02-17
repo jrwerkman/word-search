@@ -1,7 +1,12 @@
-package nl.jrwer.challenges.wordsearch.creater;
+package nl.jrwer.challenges.wordsearch;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import nl.jrwer.challenges.wordsearch.creater.Puzzle;
+import nl.jrwer.challenges.wordsearch.creater.words.BigToSmallWordList;
+import nl.jrwer.challenges.wordsearch.creater.words.IWordList;
+import nl.jrwer.challenges.wordsearch.creater.words.WordList;
 
 public class WordSearchCreater {
 	
@@ -26,7 +31,7 @@ public class WordSearchCreater {
 		try {
 			long start = System.currentTimeMillis();
 			
-			puzzle("grid.txt", "words.txt", 20, 20, "Novadoc");
+			puzzle("grid.txt", "words.txt", 50, 50, "Novadoc", new BigToSmallWordList());
 //			puzzle("grid.txt", "words.txt", 20, 20, 10);
 //			puzzle("grid.txt", "words.txt", 20, 20, words);
 			
@@ -38,17 +43,25 @@ public class WordSearchCreater {
 		}
 	}
 	
+//	public static void puzzle(String gridFile, String wordsFile, 
+//			int height, int width, String word) throws Exception {
+//		Puzzle puzzle = new Puzzle(height, width, word);
+//		puzzle.create(gridFile, wordsFile);
+//
+//		System.out.println(puzzle);
+//	}
+	
 	public static void puzzle(String gridFile, String wordsFile, 
-			int height, int width, String word) throws Exception {
-		Puzzle puzzle = new Puzzle(height, width, word);
+			int height, int width, String sentence, IWordList wordList) throws Exception {
+		Puzzle puzzle = new Puzzle(height, width, sentence, wordList);
 		puzzle.create(gridFile, wordsFile);
 
 		System.out.println(puzzle);
 	}
 	
 	public static void puzzle(String gridFile, String wordsFile, 
-			int height, int width, int length) throws Exception {
-		Puzzle puzzle = new Puzzle(height, width, length);
+			int height, int width, int length, IWordList wordList) throws Exception {
+		Puzzle puzzle = new Puzzle(height, width, length, wordList);
 		puzzle.create(gridFile, wordsFile);
 
 		System.out.println(puzzle);
@@ -59,7 +72,9 @@ public class WordSearchCreater {
 		List<String> l = new ArrayList<>();
 		l.addAll(wordList);
 		
-		Puzzle puzzle = new Puzzle(height, width, l);
+		IWordList wl = new WordList(l);
+		
+		Puzzle puzzle = new Puzzle(height, width, "", wl);
 		puzzle.create(gridFile, wordsFile);
 		
 		System.out.println(puzzle);
