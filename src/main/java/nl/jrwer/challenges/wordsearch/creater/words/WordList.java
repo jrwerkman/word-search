@@ -1,14 +1,17 @@
 package nl.jrwer.challenges.wordsearch.creater.words;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class WordList implements IWordList {
-	private final List<String> words;
+public class WordList extends AbstractWordList {
+	private final List<String> words = new ArrayList<>();	
 	private int count = 0;
 
 	public WordList(List<String> words) {
-		this.words = words;
+		super(2, Integer.MAX_VALUE);
+		
+		this.words.addAll(words);
 	}
 	
 	@Override

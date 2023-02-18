@@ -1,52 +1,20 @@
 package nl.jrwer.challenges.wordsearch.creater.words;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
-// TODO load words from big to small
-public class RandomWordList implements IWordList {
-	/**
-	 * https://github.com/dwyl/english-words
-	 */
-	private static final String WORD_LIST_EN = "words_alpha.txt";
-	
-	/**
-	 * https://github.com/OpenTaal/opentaal-wordlist 
-	 */
-	private static final String WORD_LIST_NL = "words_nl.txt";
-	
-	private final List<String> words = new ArrayList<>();
-	private final int wordCount;
-	
+public class RandomWordList extends AbstractPreloadedWordList {
+	private final List<String> words = new ArrayList<>();	
 	private int count = 0;
-	
-	public RandomWordList() {
-		loadWords();
-		this.wordCount = words.size();
+
+	public RandomWordList(Language language) {
+		this(2, Integer.MAX_VALUE, language);
 	}
 	
-	private void loadWords() {
-        try (InputStream inputStream = RandomWordList.class.getClassLoader().getResourceAsStream(WORD_LIST_NL);
-        		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-        	String line;
-        	
-            while ((line = reader.readLine()) != null) {
-            	if(line.isBlank())
-            		continue;
-            	
-            	// skip 1 letter words
-            	if(line.length() > 2 && Pattern.matches("[\\dA-Za-z]+", line))
-            		words.add(line.toUpperCase());
-            }
-        } catch (IOException e) {
-			e.printStackTrace();
-		}
+	public RandomWordList(int minWordLength, int maxWordLength, Language language) {
+		super(minWordLength, maxWordLength, language);
+		loadWords();
 	}
 	
 	@Override
@@ -54,7 +22,7 @@ public class RandomWordList implements IWordList {
 		count = 0;
 		Collections.shuffle(words, RANDOM);
 	}
-	
+
 	@Override
 	public boolean hasNext() {
 		return count < words.size();
@@ -63,14 +31,20 @@ public class RandomWordList implements IWordList {
 	@Override
 	public String next() {
 		try {
-			return words.get(count);
+			return words.get(count).toUpperCase();
 		} finally {
 			count++;
 		}
 	}
-	
+
 	@Override
 	public String getRandomWord() {
-		return words.get(RANDOM.nextInt(wordCount)).toUpperCase();
+		return words.get(RANDOM.nextInt(words.size())).toUpperCase();
 	}
+
+	@Override
+	protected void addWord(String word) {
+		words.add(word.toUpperCase());
+	}
+
 }

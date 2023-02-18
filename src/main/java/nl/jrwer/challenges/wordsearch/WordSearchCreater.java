@@ -5,7 +5,10 @@ import java.util.List;
 
 import nl.jrwer.challenges.wordsearch.creater.Puzzle;
 import nl.jrwer.challenges.wordsearch.creater.words.BigToSmallWordList;
+import nl.jrwer.challenges.wordsearch.creater.words.FakeRandomWordList;
 import nl.jrwer.challenges.wordsearch.creater.words.IWordList;
+import nl.jrwer.challenges.wordsearch.creater.words.Language;
+import nl.jrwer.challenges.wordsearch.creater.words.RandomWordList;
 import nl.jrwer.challenges.wordsearch.creater.words.WordList;
 
 public class WordSearchCreater {
@@ -31,7 +34,11 @@ public class WordSearchCreater {
 		try {
 			long start = System.currentTimeMillis();
 			
-			puzzle("grid.txt", "words.txt", 1000, 1000, "Novadoc", new BigToSmallWordList());
+//			puzzle("grid.txt", "words.txt", 20, 20, "Novadoc", new BigToSmallWordList(Language.NL));
+//			puzzle("grid.txt", "words.txt", 20, 20, "Novadoc", new RandomWordList(Language.NL));
+//			puzzle("grid.txt", "words.txt", 20, 20, "Novadoc", new WordList(words);
+			puzzle("grid.txt", "words.txt", 100, 100, "Novadoc", new FakeRandomWordList(4, 20));
+			
 //			puzzle("grid.txt", "words.txt", 20, 20, 10);
 //			puzzle("grid.txt", "words.txt", 20, 20, words);
 			
