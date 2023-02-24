@@ -34,10 +34,10 @@ public class WordSearchCreater {
 		try {
 			long start = System.currentTimeMillis();
 			
-//			puzzle("grid.txt", "words.txt", 100, 100, "Novadoc", new BigToSmallWordList(Language.NL));
+			puzzle("grid.txt", "words.txt", 250, 250, "Novadoc", new BigToSmallWordList(Language.NL));
 //			puzzle("grid.txt", "words.txt", 20, 20, "Novadoc", new RandomWordList(Language.NL));
 //			puzzle("grid.txt", "words.txt", 20, 20, "Novadoc", new WordList(words);
-			puzzle("grid.txt", "words.txt", 250, 250, "Novadoc", new FakeRandomWordList(3, 50));
+//			puzzle("grid.txt", "words.txt", 250, 250, "Novadoc", new FakeRandomWordList(3, 50));
 			
 //			puzzle("grid.txt", "words.txt", 20, 20, 10);
 //			puzzle("grid.txt", "words.txt", 20, 20, words);

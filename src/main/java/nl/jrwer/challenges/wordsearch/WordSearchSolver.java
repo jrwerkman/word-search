@@ -53,7 +53,7 @@ public class WordSearchSolver {
 		StringBuilder sb = new StringBuilder();
 		sb.append(w.getClass().getSimpleName()).append('\n');
 		sb.append("Words found: ").append(w.wordsFound).append('\n');
-		sb.append("Unused letters: ").append(unused.length() > 200 ? unused.length() : unused.toString()).append('\n');
+		sb.append("Unused letters: ").append(unused.length() > 250 ? unused.length() : unused.toString()).append('\n');
 		sb.append("Time loading data: ").append(afterLoading - start).append(" nanoseconds").append('\n');
 		sb.append("Time processing data: ").append(end - afterLoading).append(" nanoseconds").append('\n');
 		sb.append("Time processing data: ").append((end - afterLoading) / 1000000).append(" milisecond").append('\n');
