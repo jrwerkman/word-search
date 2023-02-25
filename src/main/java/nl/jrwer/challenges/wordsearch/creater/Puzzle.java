@@ -17,22 +17,14 @@ import java.util.Set;
 import nl.jrwer.challenges.wordsearch.creater.words.IWordList;
 import nl.jrwer.challenges.wordsearch.solver.Direction;
 
-public class Puzzle {
-	private static final Random RANDOM = new Random();
-	private final char[][] grid;
-	private final char[] sentence;
-	private final int width;
-	private final int height;
-	private final int amountLetters;
+public class Puzzle extends AbstractPuzzle {
+
 	
-	private final Map<Character, List<Coord>> letterCoords = new HashMap<>();
+	protected final Map<Character, List<Coord>> letterCoords = new HashMap<>();
 //	private final Map<Coord, String> usedWords = new HashMap<>(); 
 	
-	private final Set<String> usedWords = new HashSet<>();
-	private final Set<Coord> unused = new HashSet<>();
-	private final Set<Coord> used = new HashSet<>();
-	private final Set<Coord> dontUse = new HashSet<>();
-	private final IWordList words;
+
+	protected final IWordList words;
 	
 	public Puzzle(int width, int height, IWordList words) {
 		this(width, height, "", words);
@@ -43,23 +35,15 @@ public class Puzzle {
 	}
 	
 	public Puzzle(int width, int height, String sentence, IWordList words) {
+	    super(width, height, sentence);
+	    
 		this.words = words; 
-		this.grid = new char[width][height];
 		
 		for(int x=0; x<width; x++)
 			Arrays.fill(grid[x], '#');
-		
-		for(int x=0; x<width; x++)
-			for(int y=0; y<height; y++)
-				unused.add(new Coord(x, y));
-		
-		this.sentence = sentence.toUpperCase().toCharArray();
-		
-		this.height = height;
-		this.width = width;
-		this.amountLetters = width * height;
 	}
 	
+    @Override
 	public void create() {
 		placeSentenceRandom();
 		placeWords();
@@ -73,72 +57,6 @@ public class Puzzle {
 		
 		gridToFile(gridOutput);
 		wordsToFile(wordsOutput);
-	}
-	
-	private void gridToFile(String filename) throws IOException {
-		try(BufferedWriter writer = new BufferedWriter(new FileWriter(filename, false))) {
-			writer.write(this.toString());
-		}
-	}
-	
-	private void wordsToFile(String filename) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		
-		for(String word : usedWords)
-			sb.append(word).append('\n');
-		
-		try(BufferedWriter writer = new BufferedWriter(new FileWriter(filename, false))) {
-			writer.write(sb.toString());
-		}
-		
-	}
-
-//	private void placeSentence() {
-//		List<Coord> sentenceCoords = new ArrayList<>();
-//		sentenceCoords.addAll(unused);
-//		
-//		sortCoordsList(sentenceCoords);
-//		placeSentence(sentenceCoords);
-//	}
-	
-	private void placeSentenceRandom() {
-		List<Coord> randomCoords = new ArrayList<>();
-		
-		while(randomCoords.size() < sentence.length) {
-			Coord c = getRandomCoord();
-			
-			if(!randomCoords.contains(c))
-				randomCoords.add(c);
-		}
-
-		sortCoordsList(randomCoords);
-		placeSentence(randomCoords);
-	}
-	
-	private void sortCoordsList(List<Coord> l) {
-		Collections.sort(l, new Comparator<Coord>() {
-			public int compare(Coord c1, Coord c2) {
-				int result = Integer.compare(c1.y, c2.y);
-				
-				if (result == 0) 
-					result = Integer.compare(c1.x, c2.x);
-
-				return result;
-			}
-		});
-	}
-	
-	private void placeSentence(List<Coord> coords) {
-		int i=0;
-		for(Coord c : coords) {
-			grid[c.x][c.y] = sentence[i];
-
-			used.add(c);
-			dontUse.add(c);
-			unused.remove(c);
-
-			i++;
-		}
 	}
 
 	/**
@@ -311,40 +229,6 @@ public class Puzzle {
 		return currentChar == '#' || currentChar == letter;
 	}
 	
-	private boolean isSubWord(String word) {
-		for(String used : usedWords)
-			if(word.contains(used) || used.contains(word))
-				return true;
-		
-		return false;
-	}
-	
-	private Coord getRandomCoord() {
-		int x = RANDOM.nextInt(width);
-		int y = RANDOM.nextInt(height);
-		
-		return new Coord(x, y);
-	}
-	
-	private Direction getRandomDirection() {
-		Direction[] dirs = Direction.values();
-		
-		return dirs[RANDOM.nextInt(dirs.length)];
-	}
-	
-	private static String getRandomSentence(int length) {
-		StringBuilder sb = new StringBuilder();
-		
-		for(int i=0; i<length; i++)
-			sb.append(getRandomChar());
-		
-		return sb.toString();
-	}
-	
-	public static char getRandomChar() {
-		return (char) (RANDOM.nextInt(26) + 65);
-	}
-	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -357,39 +241,5 @@ public class Puzzle {
 		}
 		
 		return sb.toString();
-	}
-	
-	class Coord {
-		final int x,y;
-		
-		public Coord(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-		
-		public Coord(Coord c, Direction d) {
-			this.x = c.x + d.hor;
-			this.y = c.y + d.ver;
-		}		
-		
-		@Override
-		public int hashCode() {
-			return x << 8 | y;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if(obj instanceof Coord) {
-				Coord c = (Coord) obj;
-				
-				return x == c.x && y == c.y;
-			}
-			return false;
-		}
-		
-		@Override
-		public String toString() {
-			return x + "," + y;
-		}
 	}
 }
