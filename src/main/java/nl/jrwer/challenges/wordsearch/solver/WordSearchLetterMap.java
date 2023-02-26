@@ -13,6 +13,9 @@ public class WordSearchLetterMap extends WordSearchBase {
 	public int height, width;
 	public List<String> words;
 	
+	public WordSearchLetterMap(String gridFile, String wordsFile) {
+		super(gridFile, wordsFile);
+	}
 	
 	@Override
 	public void prepare() throws Exception {
@@ -77,7 +80,7 @@ public class WordSearchLetterMap extends WordSearchBase {
 	}
 	
 	public void loadGrid() throws Exception{
-		List<String> lines = load(FILE_GRID);
+		List<String> lines = load(gridFile);
 		
 		this.height = lines.size();
 		this.width = lines.get(0).length();
@@ -102,9 +105,14 @@ public class WordSearchLetterMap extends WordSearchBase {
 	}
 	
 	public void loadWords() throws Exception {
-		this.words = load(FILE_WORDS);
+		this.words = load(wordsFile);
 	}
 	
+
+	@Override
+	public int words() {
+		return words.size();
+	}
 	
 	class Coord {
 		final int x, y;

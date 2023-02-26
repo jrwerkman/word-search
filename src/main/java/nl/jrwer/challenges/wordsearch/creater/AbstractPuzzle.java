@@ -132,4 +132,19 @@ public abstract class AbstractPuzzle {
     public static char getRandomChar() {
         return (char) (RANDOM.nextInt(26) + 65);
     }    
+
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		
+		for(int y=0; y<height; y++) {
+			for(int x=0; x<width; x++)
+				sb.append(grid[x][y]).append(' ');
+			
+			sb.append('\n');
+		}
+		
+		return sb.toString();
+	}
 }

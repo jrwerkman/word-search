@@ -1,18 +1,11 @@
 package nl.jrwer.challenges.wordsearch.creater;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 
 import nl.jrwer.challenges.wordsearch.creater.words.IWordList;
 import nl.jrwer.challenges.wordsearch.solver.Direction;
@@ -179,14 +172,6 @@ public class Puzzle extends AbstractPuzzle {
 		usedWords.add(wordString);
 	}
 	
-//	private boolean canPlace(char[] word, Coord coord) {
-//		for(Direction direction : Direction.values())
-//			if(!canPlace(word, direction, coord))
-//				return false;
-//		
-//		return true;
-//	}
-	
 	/**
 	 * Checks:
 	 * - if words is in grid
@@ -227,19 +212,5 @@ public class Puzzle extends AbstractPuzzle {
 		char currentChar = grid[c.x][c.y];
 		
 		return currentChar == '#' || currentChar == letter;
-	}
-	
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		
-		for(int y=0; y<height; y++) {
-			for(int x=0; x<width; x++)
-				sb.append(grid[x][y]).append(' ');
-			
-			sb.append('\n');
-		}
-		
-		return sb.toString();
 	}
 }

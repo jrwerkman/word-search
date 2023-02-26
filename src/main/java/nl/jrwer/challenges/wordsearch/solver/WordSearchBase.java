@@ -15,14 +15,18 @@ import java.util.List;
  *
  */
 public abstract class WordSearchBase {
-	public static final String FILE_GRID = "grid.txt";
-	public static final String FILE_WORDS = "words.txt";
+//	public static final String FILE_GRID = "grid.txt";
+//	public static final String FILE_WORDS = "words.txt";
+	 
+	public final String gridFile;
+	public final String wordsFile;
 	
 	public int wordsFound = 0;
-//	public static final String FILE_GRID = "grid2.txt";
-//	public static final String FILE_WORDS = "words2.txt";
-//	public static final String FILE_GRID = "grid_big.txt";
-//	public static final String FILE_WORDS = "words_big.txt";
+	
+	public WordSearchBase(String gridFile, String wordsFile) {
+		this.gridFile = gridFile;
+		this.wordsFile = wordsFile;
+	}
 	
 	public List<String> loadInJar(String file) throws Exception {
 		List<String> lines = new ArrayList<>();
@@ -53,4 +57,5 @@ public abstract class WordSearchBase {
 	
 	public abstract void prepare() throws Exception;
 	public abstract String execute();
+	public abstract int words();
 }

@@ -10,24 +10,24 @@ public class WordSearchSolver {
 
 	public static void main(String[] args) {
 		// big --> 1200
-		execute(System.nanoTime(), new WordSearchArray());
+//		execute(System.nanoTime(), new WordSearchArray("superGrid.txt", "superWords.txt"));
 		
 		// big --> 1500
-//		execute(System.nanoTime(), new WordSearch2dArray());
+//		execute(System.nanoTime(), new WordSearch2dArray("superGrid.txt", "superWords.txt"));
 		
 		// big --> much slower
-//		execute(System.nanoTime(), new WordSearchObject());
+//		execute(System.nanoTime(), new WordSearchObject("superGrid.txt", "superWords.txt"));
 		
 		// big --> 400
-//		execute(System.nanoTime(), new WordSearchLetterMap());
+		execute(System.nanoTime(), new WordSearchLetterMap("superGrid.txt", "superWords.txt"));
 	}
 	
-	public static void all() {
+	public static void all(String gridFile, String wordsFile) {
 		WordSearchBase[] searchers = new WordSearchBase[] {
-				new WordSearchObject(),
-				new WordSearchLetterMap(),
-				new WordSearch2dArray(),
-				new WordSearchArray(),
+				new WordSearchObject(gridFile, wordsFile),
+				new WordSearchLetterMap(gridFile, wordsFile),
+				new WordSearch2dArray(gridFile, wordsFile),
+				new WordSearchArray(gridFile, wordsFile),
 		};
 		
 		
@@ -52,7 +52,7 @@ public class WordSearchSolver {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append(w.getClass().getSimpleName()).append('\n');
-		sb.append("Words found: ").append(w.wordsFound).append('\n');
+		sb.append("Words found: ").append(w.wordsFound).append(" of ").append(w.words()).append('\n');
 		sb.append("Unused letters: ").append(unused.length() > 250 ? unused.length() : unused.toString()).append('\n');
 		sb.append("Time loading data: ").append(afterLoading - start).append(" nanoseconds").append('\n');
 		sb.append("Time processing data: ").append(end - afterLoading).append(" nanoseconds").append('\n');

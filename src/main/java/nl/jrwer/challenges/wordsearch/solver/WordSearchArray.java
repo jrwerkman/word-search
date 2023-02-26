@@ -9,6 +9,10 @@ public class WordSearchArray extends WordSearchBase {
 	public int height, width;
 	public List<String> words;
 	
+	public WordSearchArray(String gridFile, String wordsFile) {
+		super(gridFile, wordsFile);
+	}
+	
 	@Override
 	public void prepare() throws Exception {
 		loadGrid();
@@ -20,18 +24,26 @@ public class WordSearchArray extends WordSearchBase {
 		for(String word : words)
 			findWord(word.toCharArray());
 		
-		System.out.println(wordsFound);
-		
 		return unusedChars();
 	}
 	
 	public void findWord(char[] word) {
+//		int found = 0;
+		
+//		for(int x=this.width-1; x>=0; x--)
+//			for(int y=this.height-1; y>=0; y--) {
+
 		for(int x=0; x<this.width; x++)
-			for(int y=0; y<this.height; y++) 
+			for(int y=0; y<this.height; y++) {
 				if(grid[(y * width) + x] == word[0] && findAndMarkWord(y, x, word)) {
 					wordsFound++;
+//					found++;
 					return;
 				}
+			}
+
+//		if(found > 1)
+//			System.out.println("Found word \'" + new String(word) + "\' " + found + " times");
 	}
 	
 	public boolean findAndMarkWord(int y, int x, char[] word) {
@@ -71,7 +83,7 @@ public class WordSearchArray extends WordSearchBase {
 	}
 	
 	public void loadGrid() throws Exception {
-		List<String> lines = load(FILE_GRID);
+		List<String> lines = load(gridFile);
 		this.height = lines.size();
 		this.width = lines.get(0).length();
 		this.grid = new char[this.height * this.width];
@@ -82,6 +94,11 @@ public class WordSearchArray extends WordSearchBase {
 	}
 	
 	public void loadWords() throws Exception {
-		this.words = load(FILE_WORDS);
+		this.words = load(wordsFile);
+	}
+
+	@Override
+	public int words() {
+		return words.size();
 	}
 }

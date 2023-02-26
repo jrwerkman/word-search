@@ -9,6 +9,10 @@ public class WordSearch2dArray extends WordSearchBase {
 	public int height, width;
 	public List<String> words;
 	
+	public WordSearch2dArray(String gridFile, String wordsFile) {
+		super(gridFile, wordsFile);
+	}
+	
 	@Override
 	public void prepare() throws Exception {
 		loadGrid();
@@ -26,10 +30,8 @@ public class WordSearch2dArray extends WordSearchBase {
 	public void findWord(char[] word) {
 		for(int x=0; x<this.width; x++)
 			for(int y=0; y<this.height; y++) 
-				if(grid[y][x] == word[0] && findAndMarkWord(y, x, word)) {
+				if(grid[y][x] == word[0] && findAndMarkWord(y, x, word))
 					wordsFound++;
-					return;
-				}
 	}
 	
 	public boolean findAndMarkWord(int y, int x, char[] word) {
@@ -70,7 +72,7 @@ public class WordSearch2dArray extends WordSearchBase {
 	}
 	
 	public void loadGrid() throws Exception {
-		List<String> lines = load(FILE_GRID);
+		List<String> lines = load(gridFile);
 		this.height = lines.size();
 		this.width = lines.get(0).length();
 		this.grid = new char[this.height][this.width];
@@ -81,6 +83,11 @@ public class WordSearch2dArray extends WordSearchBase {
 	}
 	
 	public void loadWords() throws Exception {
-		this.words = load(FILE_WORDS);
+		this.words = load(wordsFile);
+	}
+
+	@Override
+	public int words() {
+		return words.size();
 	}
 }

@@ -8,6 +8,10 @@ public class WordSearchObject extends WordSearchBase {
 	public int height, width;
 	public List<String> words;
 	
+	public WordSearchObject(String gridFile, String wordsFile) {
+		super(gridFile, wordsFile);
+	}
+	
 	@Override
 	public void prepare() throws Exception {
 		loadGrid();
@@ -69,7 +73,7 @@ public class WordSearchObject extends WordSearchBase {
 	}
 	
 	public void loadGrid() throws Exception {
-		List<String> lines = load(FILE_GRID);
+		List<String> lines = load(gridFile);
 		this.height = lines.size();
 		this.width = lines.get(0).length();
 		this.grid = new Elem[this.height][this.width];
@@ -83,9 +87,15 @@ public class WordSearchObject extends WordSearchBase {
 	}
 	
 	public void loadWords() throws Exception {
-		this.words = load(FILE_WORDS);
+		this.words = load(wordsFile);
 	}
 	
+
+	@Override
+	public int words() {
+		return words.size();
+	}
+
 	class Elem {
 		final char c;
 		boolean found = false;
