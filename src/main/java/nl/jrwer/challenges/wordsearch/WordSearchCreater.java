@@ -22,11 +22,6 @@ public class WordSearchCreater {
 		    "length",
 		    "opportunity");
 	
-	/**
-	 * https://github.com/OpenTaal/opentaal-wordlist 
-	 * 
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		try {
 			long start = System.currentTimeMillis();

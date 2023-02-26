@@ -80,7 +80,7 @@ public class SuperPuzzle extends AbstractPuzzle {
             unused.removeAll(coord);
             usedWords.add(word);
         	
-//            System.out.println(word);
+            System.out.println(word);
             
             return true;
         }
