@@ -13,6 +13,7 @@ public class WordSearchSolver {
 		// 100  --> 53
 		// 250  --> 807, 719, 710, 727, 717
 		// 1000 --> 168718 ms
+//					38016
 //		execute(System.nanoTime(), new WordSearchLetterMap("superGrid100.txt", "superWords100.txt"));
 		execute(System.nanoTime(), new WordSearchLetterMap("superGrid250.txt", "superWords250.txt"));
 //		execute(System.nanoTime(), new WordSearchLetterMap("superGrid.txt", "superWords.txt"));

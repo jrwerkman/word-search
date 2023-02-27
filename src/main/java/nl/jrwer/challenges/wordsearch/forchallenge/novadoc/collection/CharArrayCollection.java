@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class CharArrayCollection {
 	private JRChar[] collection;
 	private int lastIndex = 0;
-	
+	private int counter = 0;
 	public CharArrayCollection() {
 		this(1000000);
 	}
@@ -22,6 +22,25 @@ public class CharArrayCollection {
 			collection = Arrays.copyOf(collection, collection.length * 2);
 	}
 	
+	public synchronized void reset() {
+		counter = 0;
+	}
+	
+	public synchronized boolean hasNext() {
+		return counter < lastIndex;
+	}
+	
+	public synchronized JRChar peek() {
+		try {
+			if(counter < lastIndex)
+				return collection[counter];
+		} finally {
+			counter++;
+		}
+		
+		return null;
+	}
+	
 	public char[] get(int index) {
 		return collection[index].arr;
 	}
@@ -30,8 +49,8 @@ public class CharArrayCollection {
 		return lastIndex;
 	}
 	
-	private class JRChar {
-		final char[] arr;
+	public class JRChar {
+		public final char[] arr;
 		
 		public JRChar(char[] arr) {
 			this.arr = arr;
