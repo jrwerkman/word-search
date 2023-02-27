@@ -10,32 +10,31 @@ import nl.jrwer.challenges.wordsearch.solver.WordSearchObject;
 public class WordSearchSolver {
 
 	public static void main(String[] args) {
-		// 100  --> 60
-		// 250  --> 1037, 978, 973, 978, 1018
-		// 1000 --> 
-//		execute(System.nanoTime(), new WordSearchLetterMapArray("superGrid100.txt", "superWords100.txt"));
-		execute(System.nanoTime(), new WordSearchLetterMapArray("superGrid250.txt", "superWords250.txt"));
-//		execute(System.nanoTime(), new WordSearchLetterMapArray("grid.txt", "words.txt"));
-
 		// 100  --> 53
 		// 250  --> 807, 719, 710, 727, 717
 		// 1000 --> 168718 ms
 //		execute(System.nanoTime(), new WordSearchLetterMap("superGrid100.txt", "superWords100.txt"));
-//		execute(System.nanoTime(), new WordSearchLetterMap("superGrid250.txt", "superWords250.txt"));
+		execute(System.nanoTime(), new WordSearchLetterMap("superGrid250.txt", "superWords250.txt"));
 //		execute(System.nanoTime(), new WordSearchLetterMap("superGrid.txt", "superWords.txt"));
+		
+		// 100  --> 60
+		// 250  --> 1037, 978, 973, 978, 1018
+		// 1000 --> 
+//		execute(System.nanoTime(), new WordSearchLetterMapArray("superGrid100.txt", "superWords100.txt"));
+//		execute(System.nanoTime(), new WordSearchLetterMapArray("superGrid250.txt", "superWords250.txt"));
+//		execute(System.nanoTime(), new WordSearchLetterMapArray("grid.txt", "words.txt"));
 
 		// 250  --> 1329, 1395
-		// big --> 1652921 ms
+		// 1000 --> 534886 ms
 //		execute(System.nanoTime(), new WordSearchArray("superGrid250.txt", "superWords250.txt"));
 //		execute(System.nanoTime(), new WordSearchArray("superGrid.txt", "superWords.txt"));
 
-		// 250  --> 4564, 47
-		// big --> 534886 ms
+		// 250  --> 4564
+		// 1000 --> 1652921 ms
 //		execute(System.nanoTime(), new WordSearch2dArray("superGrid250.txt", "superWords250.txt"));
 //		execute(System.nanoTime(), new WordSearch2dArray("superGrid.txt", "superWords.txt"));
 		
-		
-		// big --> 3878984 ms
+		// 1000 --> 3878984 ms
 //		execute(System.nanoTime(), new WordSearchObject("superGrid.txt", "superWords.txt"));
 	}
 	
@@ -75,6 +74,7 @@ public class WordSearchSolver {
 		sb.append("Time processing data: ").append(end - afterLoading).append(" nanoseconds").append('\n');
 		sb.append("Time processing data: ").append((end - afterLoading) / 1000000).append(" milisecond").append('\n');
 		sb.append("Total time: ").append(end - start).append(" nanoseconds").append('\n').append('\n');
+		sb.append("Total time: ").append((end - start) / 1000000).append(" milisecond").append('\n').append('\n');
 		
 		System.out.println(sb);
 	}

@@ -45,13 +45,14 @@ public class WordSearchLetterMapArray extends WordSearchBase {
 		int y = coord / width;
 		int x = coord % width;
 		
-		return find(x, y, word, 1, 0) || find(x, y, word, -1, 0) 
-				|| find(x, y, word, 0, 1) || find(x, y, word, 0, -1)
-				|| find(x, y, word, -1, -1) || find(x, y, word, -1, 1)
-				|| find(x, y, word, 1, -1) || find(x, y, word, 1, 1);
+		return find(coord, x, y, word, 1, 0) || find(coord, x, y, word, -1, 0) 
+				|| find(coord, x, y, word, 0, 1) || find(coord, x, y, word, 0, -1)
+				|| find(coord, x, y, word, -1, -1) || find(coord, x, y, word, -1, 1)
+				|| find(coord, x, y, word, 1, -1) || find(coord, x, y, word, 1, 1);
 	}
 	
-	public boolean find(int x, int y, char[] word, int xDir, int yDir) {
+	// TODO use coord to calculate
+	public boolean find(int coord, int x, int y, char[] word, int xDir, int yDir) {
 		int wordLength = word.length;
 		int boundX = x + ((wordLength-1) * xDir);
 		int boundY = y + ((wordLength-1) * yDir);
@@ -59,12 +60,14 @@ public class WordSearchLetterMapArray extends WordSearchBase {
 		if(boundX < 0 || boundY < 0 || boundX >= width || boundY >= height)
 			return false;
 		
-		for(int i=1; i<wordLength; i++) 
-			if(grid[((y + (i * yDir)) * width) + (x + (i * xDir))] != word[i])
+		for(int i=1; i<wordLength; i++)
+			if(grid[((coord + ((i * yDir) * width)) + (i * xDir))] != word[i])
 				return false;
-	
-		for(int i=0; i<wordLength; i++)
-			used[((y + (i * yDir)) * width) + (x + (i * xDir))] = true;
+		
+		used[coord] = true;
+		
+		for(int i=1; i<wordLength; i++)
+			used[((coord + ((i * yDir) * width)) + (i * xDir))] = true;
 		
 		return true;
 		

@@ -58,7 +58,6 @@ public class WordSearchLetterMap extends WordSearchBase {
 			used[y + (i * dir.ver)][x + (i * dir.hor)] = true;
 		
 		return true;
-		
 	}
 	
 	public boolean equals(int y, int x, char c) {
