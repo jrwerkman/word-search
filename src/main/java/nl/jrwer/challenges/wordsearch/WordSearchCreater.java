@@ -29,7 +29,7 @@ public class WordSearchCreater {
 			long start = System.currentTimeMillis();
 			
 //			superPuzzle("superGrid.txt", "superWords.txt", 1000, 1000, "Novadoc");
-			superPuzzle("superGrid250.txt", "superWords250.txt", 250, 250, "Novadoc");
+			superPuzzle("superGrid50.txt", "superWords50.txt", 50, 50, "Novadoc");
 			
 			
 //			puzzle("grid.txt", "words.txt", 5, 5, "Novadoc", new BigToSmallWordList(Language.NL));
